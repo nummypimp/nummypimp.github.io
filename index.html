@@ -103,7 +103,7 @@ The cat was playing in the garden.
 </form><hr>
 
 
-<form method="post" action=""  oninput="x.value=parseInt(a.value)+parseInt(b.value)">
+<form method="post" action=""  oninput="c.value=x.value=parseInt(a.value)+parseInt(b.value);">
   0<br />
 
   <input type="range"  id="a" name="a" value="50"><br />
@@ -114,6 +114,7 @@ The cat was playing in the garden.
 
   =
   <output name="x" for="a b"></output>
+  <input type="number" id="c" name="c" value=""><br />
   <hr><br>
   <input type="submit">
 </form><hr>
