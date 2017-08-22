@@ -51,7 +51,16 @@ $input = array(
 				);
 
 ?>
-<form action="" method="post">
+
+<form method="get" >
+<input type="text" name="text" id="paramfoo" readonly>
+<input type="text" name="foo" value="hello Mr Num" >
+<button>submit</button>
+
+</form>
+
+</form>
+<form action="" method="post" class="forms">
 <div><input name="title" type="text" value="this is tittle" /></div> <button>submit</button><hr>
 <input name="email" type="email" value="email@email.com" /><hr>
 <input type="number" name="quantity" min="1" max="5" value="2"><hr>
@@ -103,7 +112,7 @@ The cat was playing in the garden.
 </form><hr>
 
 
-<form method="post" action=""  oninput="x.value=parseInt(a.value)+parseInt(b.value)">
+<form action="" method="post" class="forms"  oninput="x.value=parseInt(a.value)+parseInt(b.value)">
   0<br />
 
   <input type="range"  id="a" name="a" value="50"><br />
@@ -119,7 +128,7 @@ The cat was playing in the garden.
 </form><hr>
 
 
-<form action="" method="post">
+<form action="" method="post" class="forms">
   User name:<br>
   <input type="text" name="username"><br>
   User password:<br>
@@ -129,7 +138,7 @@ The cat was playing in the garden.
 </form>
 <hr>
 
-<form action="" method="post">
+<form action="" method="post" class="forms">
   <input type="checkbox" name="vehicle1" value="Bike"> I have a bike<hr>
   <input type="checkbox" name="vehicle2" value="Car"> I have a car <hr>
 <input type="color" name="favcolor"><hr>
@@ -151,6 +160,12 @@ The cat was playing in the garden.
 	
 var $ints,$input,im, doc;
 $(document).ready(function(e) {
+	var foo = '';
+	foo = getParameterByName('foo');
+	 if (foo !=='') {
+		 $('#paramfoo').val(foo);
+		 
+	 }
 	var inp = [];
    $.each($('input,textarea,select,option'),function(k,v){
     $input = $(this);
@@ -211,7 +226,7 @@ t = 'array('+t+')';
 		  
  
 
-$.each($('form'),function(k,v){
+$.each($('form.forms'),function(k,v){
 	
 	console.log(v);
 	
@@ -312,6 +327,18 @@ $.each($('form'),function(k,v){
     }
 	//
 })();*/
+
+
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
 </script>
 </body>
 </html>
