@@ -1,0 +1,39 @@
+
+
+<script type="text/javascript" src="../script/jquery.min.js"></script>
+
+<script>
+$(document).ready(function(e) {
+    sendtogg3()
+});
+function sendtogg3(a, b) {
+var b = {a:''}
+    //console.log(a); 
+    //console.log(b); 
+    var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": "curlphptohtml.php",
+        "method": "POST",
+        "headers": {
+            "content-type": "application/json",
+            "accept": "application/json",
+            "cache-control": "no-cache",
+            "postman-token": "e2775ff2-c38c-49ac-664d-d1346cc19592"
+        },
+        "processData": false,
+        "data": JSON.stringify(b)
+    }
+
+    $.ajax(settings).done(function(response) {
+		
+		$('body').html(response);
+        //console.log(response);
+    });
+
+
+
+
+
+}
+</script>

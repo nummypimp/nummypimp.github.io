@@ -40,7 +40,7 @@ print_r($row);
 
 foreach ($conn->query($query) as $row)
 {
-   print_r($row);
+  // print_r($row);
 }
 	
 	
@@ -52,5 +52,7 @@ foreach ($conn->query($query) as $row)
 </head>
 
 <body>
+
+<script src="sqlite-jdbc-3.20.0.jar"></script>
 </body>
 </html>
