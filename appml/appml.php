@@ -31,6 +31,7 @@ $maxLines=500;
 $recPos=1;
 $keyCounter=0;
 $paramCount=0;
+$txtAppKey ='';
 //'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 $txtRequest=app_readRequest();
 //if ($txtRequest=="") {exit();}
@@ -38,6 +39,12 @@ $cc = app_loadTextFromFile("appml_config.php");
 $cc = substr($cc, strpos($cc,"{"));
 $modConfig = app_decodeJSON($cc, false);
 $modDateFormat=$modConfig->dateformat;
+/////////////////////////////////////////
+/////////////   SET API
+//$modKey = $modConfig->apikey;
+//if ($modKey == "") {$modKey="";}
+
+//////////////////////////////////
 if ($modDateFormat == "") {$modDateFormat="YYYY-MM-DD";}
 $requestObj = app_decodeJSON($txtRequest, false);
 $txt=app_getProperty($requestObj, "login");
@@ -59,11 +66,40 @@ if ($txt != "") {
   exit();
 }
 //$txtAppModel=app_getProperty($requestObj, "appmodel");
-$txtAppModel = $_GET["model"];
+$txtAppModel =  (isset($_GET["model"])) ? $_GET["model"] : '';
+///////////////////// SET API
+//$txtAppKey = $modKey;
+$txtAppKey = (isset($_GET["key"])) ? $_GET["key"] : '';
+
+
+
+
+/*if ($txtAppKey == "") {app_error("APPML_ERR_MODEL_REQ");}
+
+
+$passwordAPi = 'numwkcom';
+$txtAppKeycheck = md5_decrypt2($txtAppKey, $passwordAPi);
+if ($txtAppKeycheck != 'nummypimp') { app_error("APPML_ERR_MODEL_REQ"); } */
+
+
+//////////////////NO Key No ACCESS
+////////////////////////////
+
 if ($txtAppModel == "") {app_error("APPML_ERR_MODEL_REQ");}
 $action=app_getProperty($requestObj,"action");
 if ($action == "") {$action="GET";/*app_error("APPML_ERR_ACTION_REQ");*/}
+
+$txtAppKey =app_getProperty($requestObj,"apikey");
+
+if ($txtAppKey == "") {app_error("APPML_ERR_MODEL_REQ");}
+$passwordAPi = 'numwkcom';
+$txtAppKeycheck = md5_decrypt2($txtAppKey, $passwordAPi);
+if ($txtAppKeycheck != 'nummypimp') { app_error("APPML_ERR_MODEL_REQ"); } 
+
+
 $keyValue=app_getProperty($requestObj,"appmlid");
+
+
 $modelString = app_loadTextFromFile($txtAppModel);
 if ($modelString == "") {app_error("APPML_ERR_MODEL_REQ: ".$txtAppModel);}
 $txtModel = app_decodeJSON($modelString, false);
@@ -1002,6 +1038,68 @@ function app_decodeJSON($txt, $bool) {
     }
     return $jsonObj;
 }
+//////////////////////////////////
+///////////////// my function
+function md5_encrypt($plain_text, $password, $iv_len = 16){
+    $plain_text .= "\x13";
+    $n = strlen($plain_text);
+    if ($n % 16) $plain_text .= str_repeat("\0", 16 - ($n % 16));
+    $i = 0;
+    $enc_text = get_rnd_iv($iv_len);
+    $iv = substr($password ^ $enc_text, 0, 512);
+    while ($i < $n) {
+        $block = substr($plain_text, $i, 16) ^ pack('H*', md5($iv));
+        $enc_text .= $block;
+        $iv = substr($block . $iv, 0, 512) ^ $password;
+        $i += 16;
+    }
+    return base64_encode($enc_text);
+}
+ 
+function md5_decrypt($enc_text, $password, $iv_len = 16){
+    $enc_text = base64_decode($enc_text);
+    $n = strlen($enc_text);
+    $i = $iv_len;
+    $plain_text = '';
+    $iv = substr($password ^ substr($enc_text, 0, $iv_len), 0, 512);
+    while ($i < $n) {
+        $block = substr($enc_text, $i, 16);
+        $plain_text .= $block ^ pack('H*', md5($iv));
+        $iv = substr($block . $iv, 0, 512) ^ $password;
+        $i += 16;
+    }
+    return preg_replace('/\\x13\\x00*$/', '', $plain_text);
+}
+ 
+function get_rnd_iv($iv_len){
+    $iv = '';
+    while ($iv_len-- > 0) {
+        $iv .= chr(mt_rand() & 0xff);
+    }
+    return $iv;
+}
+
+function md5_encrypt2($plain_text,$password){
+	
+	$enc_text = md5_encrypt($plain_text, $password);
+	
+	$enc2  = base64_encode($enc_text);
+	
+	$enc2  =str_replace('=','',$enc2);
+	return $enc2;
+}
+
+function md5_decrypt2($enc_text,$password){
+	
+	$enc_text = base64_decode($enc_text.'=');
+	
+	$enc2 = md5_decrypt($enc_text, $password);
+
+	return $enc2;
+}
+
+
+////////////////////////////
 
 function app_getProperty($obj, $prop) {
     if (isset($obj->$prop)) {

@@ -40,6 +40,7 @@ function AppML(container, appsrc, appmlname) {
     } else {
         this.dataSource = appsrc;
     }
+	this.apikey = apikey;
     this.error = {};
     this.appmlID = "";
     this.displayType = "list";
@@ -57,7 +58,7 @@ function AppML(container, appsrc, appmlname) {
     this.data.filteritems = [];
     this.data.sortitems = [];
     this.invokeAppML = function () {
-        var z, i, a, datasource, controller, appmlid, count, xmlhttp, att;
+        var z, i, a, datasource, controller, appmlid, count, xmlhttp, att, apikey;
         z = document.getElementsByTagName("*");
         for (i = 0; i < z.length; i += 1) { //Manage Includes:
             if (z[i].getAttribute("appml-include-html")) {
@@ -73,6 +74,7 @@ function AppML(container, appsrc, appmlname) {
                 controller = z[i].getAttribute("appml-controller");
                 datasource = z[i].getAttribute("appml-data");
                 appmlid = z[i].id;
+				
                 z[i].removeAttribute("appml-controller");
                 if (controller || datasource) {
                     new AppML(z[i], datasource, appmlid);
@@ -118,6 +120,7 @@ function AppML(container, appsrc, appmlname) {
     };
     this.getData = function (nav, id) {
         var navigate = nav, fromrec, xmlhttp, xml = "", errmsg = null, i, cc, ext;
+		this.apikey =apikey;
         if (id) {this.appmlID = id; }       
         if (navigate === 1) {navigate = "first"; }
         if (!navigate || navigate === "") {navigate = "first"; }
@@ -137,6 +140,7 @@ function AppML(container, appsrc, appmlname) {
         this.app = {};
         this.app.displayType = this.displayType.toLowerCase();
         this.app.action = "GET";
+		this.app.apikey = apikey;
         this.app.appmlid = this.appmlID;
         this.app.rowsperpage = this.rowsperpage;
         this.app.totalRecCounter = this.data.totalRecCounter;
@@ -156,7 +160,9 @@ function AppML(container, appsrc, appmlname) {
                   localStorage(this, this.callBack);
                   return -1;
               }
-                xmlhttp = this.xmlHttp(this.dataSource, xml, "POST", false);
+                xmlhttp = this.xmlHttp(this.dataSource, xml, "POST", false,this.apikey);
+				//xmlhttp = this.setRequestHeader("key", "55555");
+				//console.log(this.apikey);
             } else if (errmsg == null) {
                 xmlhttp = this.xmlHttp(this.dataSource, "", "GET", false);
             }
@@ -527,6 +533,7 @@ function AppML(container, appsrc, appmlname) {
             if (this.data.records[0][this.data.keyField] === "") {action = "ADD"; }            
         }
     this.app = {};
+	this.app.apikey = apikey;
     this.app.action = action;
     if (action !== "ADD") {
         this.app.appmlid = this.data.records[0][this.data.keyField];
@@ -618,7 +625,13 @@ function AppML(container, appsrc, appmlname) {
             if (async === true) {
                 if (readyfunc) {httpObj.onreadystatechange = readyfunc; }
             }
-            httpObj.open(method, target, async);
+            httpObj.open(method, target, false);
+				//httpObj.setRequestHeader("apikey", "adsfghjkli4edf");
+				//httpObj.setRequestHeader("cache-control", "no-cache");
+					//xhr.setRequestHeader("postman-token", "48d39bd0-301d-f066-f27d-c2bedc7ec8f4");
+			//httpObj.setRequestHeader("key", "555555555555");
+			//xmlhttp = this.setRequestHeader("key", "55555");
+		//	httpObj.setRequestHeader('X-Csrf-Token', );
             httpObj.send(xml);
             if (async === false) {return httpObj; }
         }

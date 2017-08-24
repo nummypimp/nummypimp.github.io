@@ -5,7 +5,12 @@
 <meta charset="utf-8">
 <title>Products</title>
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<script src="appml.js"></script>
+<script>
+var apikey = "eFZZRmx0eE4zdWdFVVdIZDA1Q2dIUUF2TVh3WDVZalNUVTQxNklmd2pLST0";
+
+
+
+</script>
 
 </head>
 <body>
@@ -66,8 +71,10 @@
 </div>
 <h3 id="sumprice"></h3>
 </div>
-
+<script src="appml.js"></script>
 <script>
+
+
 function myValidator(item) {
     var obj = appml("Form01");
     obj.message = "validate";
@@ -95,6 +102,7 @@ function myListController($appml) {
 
 function myFormController($appml) {
     if ($appml.message == "ready") {
+		$appml.apikey =apikey;
         $appml.appName = "Form01";
         $appml.dataSource = "https://numwk.com/test/appml/appml.php?model=model_productsform";
         return -1;

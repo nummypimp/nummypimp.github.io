@@ -1,4 +1,5 @@
 {
+
 "database" : {
 "connection" : "mydatabase",
 "sql" : "SELECT ProductID,ProductName,CategoryName,SupplierName,Price FROM ((Products LEFT JOIN Suppliers ON Products.SupplierID=Suppliers.SupplierID) LEFT JOIN Categories ON Products.CategoryID=Categories.CategoryID)",
@@ -13,6 +14,7 @@
 "sortitems" : [
 {"item" : "ProductName"}
 ],
-"rowsperpage" : 10
+"rowsperpage" : 10,
+"apikey":""
 }
 
