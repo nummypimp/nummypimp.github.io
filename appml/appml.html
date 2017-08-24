@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<title>Customers</title>
+<link rel="stylesheet" href="style.css">
+
+
+<body>
+
+<p id="demo"></p>
+
+
+<script src="../../script/jquery.min.js"></script>
+<script src="appml.js"></script>
+<script>
+var myObj, myArr, len, i, txt = "";
+
+// Create an AppML object and fetch the data
+myObj = new AppML();
+myObj.dataSource = "customers.php";
+myObj.getData();
+
+// Locate the data records
+myArr = myObj.data.records;
+len = myArr.length;
+
+// Display the records
+for (i = 0; i < len; i++) {
+    txt += myArr[i].CustomerName + "<br>";
+}
+$("#demo").html(txt);
+</script>
+</body>
+</html>
